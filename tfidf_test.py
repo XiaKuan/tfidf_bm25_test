@@ -78,6 +78,7 @@ def load_json(filename):
     # 导入测试语料
     texts = []
     keyindex = []
+    key_num = []
     for data in json_data:
         text = ''
         for key,values in data.items():
@@ -85,16 +86,27 @@ def load_json(filename):
                 for i in values:
                     text = text+i
                 keyindex.append(key)
+            else:
+                key_num.append(values)
+                
         texts.append(text)
-    return texts,keyindex
+    return texts,keyindex,key_num
 
 def main():
     filename = 'sort_cluster_k_300.json'
-    texts,keyindex = load_json(filename)        
+    texts,keyindex,key_num = load_json(filename)        
     wb = openpyxl.Workbook()
     sheet = wb.active
     sheet.title = 'Sheet'
     wb.get_sheet_by_name('Sheet')
+    sheet['A1'] = '编号'
+    sheet['B1'] = '聚类数量'
+    sheet['C1'] = '分词1'
+    sheet['D1'] = '分词2'
+    sheet['E1'] = '分词3'
+    sheet['F1'] = '分词4'
+    sheet['G1'] = '分词5'
+
     countlist = []
     L = []
     for text in texts:
@@ -102,7 +114,7 @@ def main():
         L.append(avgDl(text,texts))
 
     for i, count in enumerate(countlist):
-        print("Top words in document {}".format(i + 1))
+        # print("Top words in document {}".format(i + 1))
         l = L[i]
         # 取得对应的文档长度与平均文档长度的比值
         # scores = {word: tfidf(word, count, countlist) for word in count}
@@ -111,13 +123,14 @@ def main():
         # print(sorted_words)
         # for word, score in sorted_words[:5]:
         #     print("\tWord: {}, TF-IDF: {}".format(word, round(score, 5)))
-        sheet['A'+str(i+1)]=keyindex[i]
+        sheet['A'+str(i+2)]=keyindex[i]
+        sheet['B'+str(i+2)]=key_num[i]
         try:
-            sheet['B'+str(i+1)]=str(sorted_words[0])
-            sheet['C'+str(i+1)]=str(sorted_words[1])
-            sheet['D'+str(i+1)]=str(sorted_words[2])
-            sheet['E'+str(i+1)]=str(sorted_words[3])
-            sheet['F'+str(i+1)]=str(sorted_words[4])
+            sheet['C'+str(i+2)]=str(sorted_words[0])
+            sheet['D'+str(i+2)]=str(sorted_words[1])
+            sheet['E'+str(i+2)]=str(sorted_words[2])
+            sheet['F'+str(i+2)]=str(sorted_words[3])
+            sheet['F'+str(i+2)]=str(sorted_words[4])
         except IndexError:
             continue
 
