@@ -130,11 +130,11 @@ def main():
             sheet['D'+str(i+2)]=str(sorted_words[1])
             sheet['E'+str(i+2)]=str(sorted_words[2])
             sheet['F'+str(i+2)]=str(sorted_words[3])
-            sheet['F'+str(i+2)]=str(sorted_words[4])
+            sheet['G'+str(i+2)]=str(sorted_words[4])
         except IndexError:
             continue
 
-    wb.save("result1.xlsx")   
+    wb.save("result0.xlsx")   
 
         
 
