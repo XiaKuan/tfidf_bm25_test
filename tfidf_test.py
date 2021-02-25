@@ -8,6 +8,12 @@ import nltk
 import math
 import string
 import openpyxl
+from openpyxl.utils import get_column_letter, column_index_from_string
+# 根据列的数字返回字母
+get_column_letter(2) # B
+# 根据字母返回列的数字
+column_index_from_string('D') # 4
+
 import json
 # from　nltk.corpus import stopwords
 from collections import Counter
@@ -101,11 +107,7 @@ def main():
     wb.get_sheet_by_name('Sheet')
     sheet['A1'] = '编号'
     sheet['B1'] = '聚类数量'
-    sheet['C1'] = '分词1'
-    sheet['D1'] = '分词2'
-    sheet['E1'] = '分词3'
-    sheet['F1'] = '分词4'
-    sheet['G1'] = '分词5'
+
 
     countlist = []
     L = []
@@ -120,19 +122,19 @@ def main():
         # scores = {word: tfidf(word, count, countlist) for word in count}
         scores = {word: bm25tfidf(word, count, countlist,l,b=0.75,k=1.2) for word in count}
         sorted_words = sorted(scores.items(), key = lambda x: x[1], reverse=True)
+        tfcount = [bm25tf(sorted_words[j][0],count,l,b=0.75,k=1.2) for j in range(len(sorted_words))]
+        idfcount = [idf(sorted_words[j][0],countlist) for j in range(len(sorted_words))]
+
         # print(sorted_words)
         # for word, score in sorted_words[:5]:
         #     print("\tWord: {}, TF-IDF: {}".format(word, round(score, 5)))
         sheet['A'+str(i+2)]=keyindex[i]
         sheet['B'+str(i+2)]=key_num[i]
-        try:
-            sheet['C'+str(i+2)]=str(sorted_words[0])
-            sheet['D'+str(i+2)]=str(sorted_words[1])
-            sheet['E'+str(i+2)]=str(sorted_words[2])
-            sheet['F'+str(i+2)]=str(sorted_words[3])
-            sheet['G'+str(i+2)]=str(sorted_words[4])
-        except IndexError:
-            continue
+        for j in range(0,len(sorted_words),3):
+            sheet[get_column_letter(j+3)+str(i+2)]=str(sorted_words[j])
+            sheet[get_column_letter(j+4)+str(i+2)]=tfcount[j]
+            sheet[get_column_letter(j+5)+str(i+2)]=idfcount[j]
+
 
     wb.save("result0.xlsx")   
 
