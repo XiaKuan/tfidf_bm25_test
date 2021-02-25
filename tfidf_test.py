@@ -130,11 +130,11 @@ def main():
         #     print("\tWord: {}, TF-IDF: {}".format(word, round(score, 5)))
         sheet['A'+str(i+2)]=keyindex[i]
         sheet['B'+str(i+2)]=key_num[i]
-        for j in range(0,len(sorted_words),3):
-            sheet[get_column_letter(j+3)+str(i+2)]=str(sorted_words[j])
-            sheet[get_column_letter(j+4)+str(i+2)]=tfcount[j]
-            sheet[get_column_letter(j+5)+str(i+2)]=idfcount[j]
-
+        for j in range(0,len(sorted_words),4):
+            sheet[get_column_letter(j+3)+str(i+2)]=sorted_words[j][0]
+            sheet[get_column_letter(j+4)+str(i+2)]=sorted_words[j][1]
+            sheet[get_column_letter(j+5)+str(i+2)]=tfcount[j]
+            sheet[get_column_letter(j+6)+str(i+2)]=idfcount[j]
 
     wb.save("result0.xlsx")   
 
