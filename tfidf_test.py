@@ -25,7 +25,7 @@ def get_tokens(text):
     # lower = text.lower()
     # remove_punctuation_map = dict((ord(char), None) for char in string.punctuation)
     # no_punctuation = lower.translate(remove_punctuation_map)
-    tokens = jieba.lcut(text,cut_all=True)
+    tokens = jieba.lcut(text,cut_all=False)
 
     return tokens
 
@@ -98,6 +98,8 @@ def load_json(filename):
         texts.append(text)
     return texts,keyindex,key_num
 
+
+
 def main():
     filename = 'sort_cluster_k_300.json'
     texts,keyindex,key_num = load_json(filename)        
@@ -130,11 +132,15 @@ def main():
         #     print("\tWord: {}, TF-IDF: {}".format(word, round(score, 5)))
         sheet['A'+str(i+2)]=keyindex[i]
         sheet['B'+str(i+2)]=key_num[i]
-        for j in range(0,len(sorted_words),4):
-            sheet[get_column_letter(j+3)+str(i+2)]=sorted_words[j][0]
-            sheet[get_column_letter(j+4)+str(i+2)]=sorted_words[j][1]
-            sheet[get_column_letter(j+5)+str(i+2)]=tfcount[j]
-            sheet[get_column_letter(j+6)+str(i+2)]=idfcount[j]
+
+        for j in range(0,5):
+            try:
+                sheet[get_column_letter(4*j+3)+str(i+2)]=sorted_words[j][0]
+                sheet[get_column_letter(4*j+4)+str(i+2)]=sorted_words[j][1]
+                sheet[get_column_letter(4*j+5)+str(i+2)]=tfcount[j]
+                sheet[get_column_letter(4*j+6)+str(i+2)]=idfcount[j]
+            except IndexError:
+                break
 
     wb.save("result0.xlsx")   
 
