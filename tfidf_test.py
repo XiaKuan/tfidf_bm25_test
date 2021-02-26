@@ -98,7 +98,15 @@ def load_json(filename):
         texts.append(text)
     return texts,keyindex,key_num
 
+def variance(list):
+    """
+     传递一个数字列表计算方差 
+    """
 
+    avg = sum(x for x in list)/len(list)
+    s = sum((x-avg)**2 for x in list)/len(list)
+
+    return s
 
 def main():
     filename = 'sort_cluster_k_300.json'
@@ -109,7 +117,6 @@ def main():
     wb.get_sheet_by_name('Sheet')
     sheet['A1'] = '编号'
     sheet['B1'] = '聚类数量'
-
 
     countlist = []
     L = []
