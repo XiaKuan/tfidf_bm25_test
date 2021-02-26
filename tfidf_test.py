@@ -117,6 +117,9 @@ def main():
     wb.get_sheet_by_name('Sheet')
     sheet['A1'] = '编号'
     sheet['B1'] = '聚类数量'
+    sheet['C1'] = '评估值'
+    sheet['D1'] = '分词1'
+    sheet['E1'] = 'tf-idf'
 
     countlist = []
     L = []
@@ -137,18 +140,19 @@ def main():
         # print(sorted_words)
         # for word, score in sorted_words[:5]:
         #     print("\tWord: {}, TF-IDF: {}".format(word, round(score, 5)))
-        sheet['A'+str(i+2)]=keyindex[i]
-        sheet['B'+str(i+2)]=key_num[i]
-
+        sheet['A'+str(i+2)] = keyindex[i]
+        sheet['B'+str(i+2)] = key_num[i]
+        if len(sorted_words) != 0:
+            list = [int(x[1]) for x in sorted_words[0:5] ]
+            sheet['c'+str(i+2)] = variance(list)
         for j in range(0,5):
             try:
-                sheet[get_column_letter(4*j+3)+str(i+2)]=sorted_words[j][0]
-                sheet[get_column_letter(4*j+4)+str(i+2)]=sorted_words[j][1]
-                sheet[get_column_letter(4*j+5)+str(i+2)]=tfcount[j]
-                sheet[get_column_letter(4*j+6)+str(i+2)]=idfcount[j]
+                sheet[get_column_letter(4*j+4)+str(i+2)]=sorted_words[j][0]
+                sheet[get_column_letter(4*j+5)+str(i+2)]=sorted_words[j][1]
+                sheet[get_column_letter(4*j+6)+str(i+2)]=tfcount[j]
+                sheet[get_column_letter(4*j+7)+str(i+2)]=idfcount[j]
             except IndexError:
                 break
-
     wb.save("result0.xlsx")   
 
         
